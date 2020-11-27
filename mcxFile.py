@@ -8,26 +8,28 @@ import re
 import xml.etree.ElementTree as ET
 import sea_areas as sarea
 
-def mon2num(mon):
-#================
-# changes three (or more) letter month name mon to it's two digit presentation 01...12
-    m = mon.upper()[0:3]
-    mons = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC']
-    for i in range(len(mons)):
-        if m == mons[i]:
-            id = i+1
-    return str(id).rjust(2,'0')
 
-def child_node_text(node,what):
-#==============================
+def mon2num(mon):
+    # ================
+    # changes three (or more) letter month name mon to it's two digit
+    # presentation 01...12
+    # The function is not case sensitive
+    return str(['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN',
+                'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'].index(mon.upper(
+                )[0:3]) + 1).rjust(2, '0')
+
+
+def child_node_text(node, what):
+    # ==============================
     child = node.find(what)
-    if child != None:
+    if child is not None:
         r = child.text
     else:
         r = ''
     return r
 
-#==============================
+
+# ==============================
 mcx_html_tmpl = [
     '<!DOCTYPE html>',
     '<html>',
@@ -154,66 +156,7 @@ mcx_html_tmpl = [
     '        this._div.innerHTML = \'Cursor position<br/>\';',
     '      };',
     '',
-    '//    MAP',
-    '      var map = L.map(\'map\', {center:[60.517167, 21.280833], zoom: 5});',
-    '      mapLink = \'<a href="http://openstreetmap.org">OpenStreetMap</a>\';',
-    '',
-    '      var strmaplayer = L.tileLayer(',
-    '        \'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png\', {',
-    '        attribution: \'&copy; \' + mapLink + \' Contributors\',',
-    '        maxZoom: 20,',
-    '      }).addTo(map);',
-    '',
-    '      var positron = L.tileLayer(\'http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png\', {',
-    '        attribution: \'�OpenStreetMap, �CartoDB\',',
-    '      });',
-    '',
-    '      var Esri_OceanBasemap = L.tileLayer(\'http://server.arcgisonline.com/ArcGIS/rest/services/Ocean_Basemap/MapServer/tile/{z}/{y}/{x}\', {',
-    '        attribution: \'Tiles &copy; Esri &mdash; Sources: GEBCO, NOAA, CHS, OSU, UNH, CSUMB, National Geographic, DeLorme, NAVTEQ, and Esri\',',
-    '        maxZoom: 20',
-    '      });',
-    '',
-    '      var Esri_WorldTopoMap = L.tileLayer(\'http://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}\', {',
-    '        attribution: \'Sources: Esri, HERE, Garmin, Intermap, increment P Corp., GEBCO, USGS, FAO, NPS, NRCAN, GeoBase, IGN, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), (c) OpenStreetMap contributors, and the GIS User Community\',',
-    '        maxZoom: 20',
-    '      });',
-    '',
-    '      var Esri_WorldStreetMap = L.tileLayer(\'http://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}\', {',
-    '        attribution: \'Sources: Esri, HERE, Garmin, USGS, Intermap, INCREMENT P, NRCan, Esri Japan, METI, Esri China (Hong Kong), Esri Korea, Esri (Thailand), NGCC, (c) OpenStreetMap contributors, and the GIS User Community\',',
-    '        maxZoom: 20',
-    '      });',
-    '',
-    '      var opentopo = L.tileLayer(\'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png\', {',
-    '        attribution: \'�OpenStreetMap, �CartoDB\',',
-    '      });',
-    '',
-    '      var bathymetryLayer = L.tileLayer.wms("http://ows.emodnet-bathymetry.eu/wms", {',
-    '        layers: \'emodnet:mean_atlas_land\',',
-    '        format: \'image/png\',',
-    '        transparent: true,',
-    '        attribution: "Emodnet bathymetry",',
-    '        opacity: 0.8',
-    '      });',
-    '',
-    '      var coastlinesLayer = L.tileLayer.wms("http://ows.emodnet-bathymetry.eu/wms", {',
-    '        layers: \'coastlines\',',
-    '        format: \'image/png\',',
-    '        transparent: true,',
-    '        attribution: "Emodnet bathymetry",',
-    '        opacity: 0.8',
-    '      });',
-    '',
-    '      var bathymetryGroupLayer = L.layerGroup([bathymetryLayer, coastlinesLayer]);',
-    '',
-    '      var contourLayer = L.tileLayer.wms("http://ows.emodnet-bathymetry.eu/wms", {',
-    '        layers: \'emodnet:contours\',',
-    '        format: \'image/png\',',
-    '        transparent: true,',
-    '        attribution: "Emodnet bathymetry",',
-    '        opacity: 0.8',
-    '      });',
-    '',
-    '      var depthcontours = L.layerGroup([contourLayer]);',
+    '//    MOUSE POSITION DISPLAY',
     '',
     '      L.Control.MousePosition = L.Control.extend({',
     '        options: {',
@@ -261,6 +204,90 @@ mcx_html_tmpl = [
     '',
     '        }',
     '      });',
+    '',
+    '//    MAP',
+    '      var map = L.map(\'map\', {center:[60.517167, 21.280833], zoom: 5});',
+    '      mapLink = \'<a href="http://openstreetmap.org">OpenStreetMap</a>\';',
+    '',
+    '      var strmaplayer = L.tileLayer(',
+    '        \'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png\', {',
+    '        attribution: \'&copy; \' + mapLink + \' Contributors\',',
+    '        maxZoom: 20,',
+    '      }).addTo(map);',
+    '',
+    '//    BASEMAPS',
+    '',
+    '      var positron = L.tileLayer(\'http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png\', {',
+    '        attribution: \'�OpenStreetMap, �CartoDB\',',
+    '      });',
+    '',
+    '      var Esri_OceanBasemap = L.tileLayer(\'http://server.arcgisonline.com/ArcGIS/rest/services/Ocean_Basemap/MapServer/tile/{z}/{y}/{x}\', {',
+    '        attribution: \'Tiles &copy; Esri &mdash; Sources: GEBCO, NOAA, CHS, OSU, UNH, CSUMB, National Geographic, DeLorme, NAVTEQ, and Esri\',',
+    '        maxZoom: 20',
+    '      });',
+    '',
+    '      var Esri_WorldTopoMap = L.tileLayer(\'http://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}\', {',
+    '        attribution: \'Sources: Esri, HERE, Garmin, Intermap, increment P Corp., GEBCO, USGS, FAO, NPS, NRCAN, GeoBase, IGN, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), (c) OpenStreetMap contributors, and the GIS User Community\',',
+    '        maxZoom: 20',
+    '      });',
+    '',
+    '      var Esri_WorldStreetMap = L.tileLayer(\'http://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}\', {',
+    '        attribution: \'Sources: Esri, HERE, Garmin, USGS, Intermap, INCREMENT P, NRCan, Esri Japan, METI, Esri China (Hong Kong), Esri Korea, Esri (Thailand), NGCC, (c) OpenStreetMap contributors, and the GIS User Community\',',
+    '        maxZoom: 20',
+    '      });',
+    '',
+    '      var Esri_NatGeoWorldMap = L.tileLayer(\'https://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}\', {',
+    '        attribution: \'Tiles &copy; Esri &mdash; National Geographic, Esri, DeLorme, NAVTEQ, UNEP-WCMC, USGS, NASA, ESA, METI, NRCAN, GEBCO, NOAA, iPC\',',
+    '        maxZoom: 16',
+    '      });',
+    '',
+    '      var Esri_WorldImagery = L.tileLayer(\'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}\', {',
+    '        attribution: \'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community\'',
+    '      });',
+    '',
+    '      var opentopo = L.tileLayer(\'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png\', {',
+    '        attribution: \'�OpenStreetMap, �CartoDB\',',
+    '      });',
+    '',
+    '      var GeoportailFrance_orthos = L.tileLayer(\'https://wxs.ign.fr/{apikey}/geoportail/wmts?REQUEST=GetTile&SERVICE=WMTS&VERSION=1.0.0&STYLE={style}&TILEMATRIXSET=PM&FORMAT={format}&LAYER=ORTHOIMAGERY.ORTHOPHOTOS&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}\', {',
+    '        attribution: \'<a target="_blank" href="https://www.geoportail.gouv.fr/">Geoportail France</a>\',',
+    '        bounds: [[-75, -180], [81, 180]],',
+    '        minZoom: 2,',
+    '        maxZoom: 19,',
+    '        apikey: \'choisirgeoportail\',',
+    '        format: \'image/jpeg\',',
+    '        style: \'normal\'',
+    '      });',
+    '',
+    '//    OVERLAYMAPS',
+    '',
+    '      var bathymetryLayer = L.tileLayer.wms("http://ows.emodnet-bathymetry.eu/wms", {',
+    '        layers: \'emodnet:mean_atlas_land\',',
+    '        format: \'image/png\',',
+    '        transparent: true,',
+    '        attribution: "Emodnet bathymetry",',
+    '        opacity: 0.8',
+    '      });',
+    '',
+    '      var coastlinesLayer = L.tileLayer.wms("http://ows.emodnet-bathymetry.eu/wms", {',
+    '        layers: \'coastlines\',',
+    '        format: \'image/png\',',
+    '        transparent: true,',
+    '        attribution: "Emodnet bathymetry",',
+    '        opacity: 0.8',
+    '      });',
+    '',
+    '      var emodnetbathymetry = L.layerGroup([bathymetryLayer, coastlinesLayer]);',
+    '',
+    '      var contourLayer = L.tileLayer.wms("http://ows.emodnet-bathymetry.eu/wms", {',
+    '        layers: \'emodnet:contours\',',
+    '        format: \'image/png\',',
+    '        transparent: true,',
+    '        attribution: "Emodnet bathymetry",',
+    '        opacity: 0.8',
+    '      });',
+    '',
+    '      var emodnetdepthcontours = L.layerGroup([contourLayer]);',
     '',
     '      var fairways = new L.LayerGroup();',
     '      var fairWays =',
@@ -368,10 +395,15 @@ mcx_html_tmpl = [
     '      L.control.mousePosition = function (options) {return new L.Control.MousePosition(options);};',
     '      L.control.mousePosition().addTo(map);',
     '',
+    '//    KILOMETER SCALE'
+    '',
     '      L.control.scale ({maxWidth:240, metric:true, imperial:false, position: \'bottomleft\'}).addTo (map);',
+    '',
+    '//    LENGTH MEASUREMENT CONTROL',
+    ''
     '      let polylineMeasure = L.control.polylineMeasure ({position:\'topleft\', unit:\'metres\', showBearings:true, clearMeasurementsOnStop: false, showClearControl: true, showUnitControl: true})',
     '      polylineMeasure.addTo (map);',
-
+    '',
     '      function debugevent(e) { console.debug(e.type, e, polylineMeasure._currentLine) }',
     '      map.on(\'polylinemeasure:toggle\', debugevent);',
     '      map.on(\'polylinemeasure:start\', debugevent);',
@@ -382,27 +414,33 @@ mcx_html_tmpl = [
     '      map.on(\'polylinemeasure:insert\', debugevent);',
     '      map.on(\'polylinemeasure:move\', debugevent);',
     '      map.on(\'polylinemeasure:remove\', debugevent);',
-    '',  
+    '',
+    '//    ADD INFO; CURSORINFO AND LEGEND TO THE MAP',
+    '',
     '      info.addTo(map);',
     '      cursorinfo.addTo(map);',
     '      legend.addTo(map);',
     '',
-    '//    Stations and route line are on the map by default, other layers not',
+    '//    STATIONS AND ROUTELINE are on the map by default, other layers not',
+    '',
     '      stationPoints.addTo(map);',
     '      routeLine.addTo(map);',
     '',
     '      var baseMaps = {',
-    '        "StreetMap"             : strmaplayer,',
-    '        "Positron"              : positron,',
-    '        "ESRI OceanBasemap"     : Esri_OceanBasemap,',
-    '        "ESRI Worl_Topo_Map"    : Esri_WorldTopoMap,',
-    '        "ESRI World_Street_Map" : Esri_WorldStreetMap,',
-    '        "Topo"                  : opentopo}',
+    '        "StreetMap"                : strmaplayer,',
+    '        "Positron"                 : positron,',
+    '        "ESRI OceanBasemap"        : Esri_OceanBasemap,',
+    '        "ESRI Worl_Topo_Map"       : Esri_WorldTopoMap,',
+    '        "ESRI World_Street_Map"    : Esri_WorldStreetMap,',
+    '        "ESRI NatGeoWorldMap"      : Esri_NatGeoWorldMap,',
+    '        "Topo"                     : opentopo,',
+    '        "ESRI WorldImagery"        : Esri_WorldImagery,',
+    '        "Geoportail France orthos" : GeoportailFrance_orthos}',
     '',
     '      var overlayMaps = {',
-    '        "EMODnet Bathymetry"            : bathymetryGroupLayer,',
+    '        "EMODnet Bathymetry"            : emodnetbathymetry,',
     '        "BSHC Baltic Sea Bathymetry"    : bshcwater,',
-    '        "EMODnet depth contours"        : depthcontours,',
+    '        "EMODnet depth contours"        : emodnetdepthcontours,',
     '        "EEZ"                           : eez,',
     '        "Internal waters"               : internalwaters,',
     '        "Internal waters 12 nm"         : internalwaters12,',
@@ -425,434 +463,31 @@ mcx_html_tmpl = [
     '</html>',
     '']
 
-leaflet_map_template = [
-    '<!DOCTYPE html>',
-    '<html>',
-    '  <head>',
-    '    <title>OTSIKKO</title>',
-    '    <meta charset="utf-8" />',
-    '    <meta name="viewport" content="width=device-width, initial-scale=1.0">',
-    '    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css" integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ==" crossorigin=""/>',
-    '',
-    '    <style>',
-    '      html,body {',
-    '        width: 100%;',
-    '        height: 100%;',
-    '        margin: 2%;',
-    '        padding: 0;',
-    '      }',
-    '      #map {',
-    '        position: absolute;',
-    '        bottom: 2%;',
-    '        top: 2%;',
-    '        width: 90%;',
-    '        height: 95%;',
-    '        }',
-    '      .info { padding: 6px 8px; font: 14px/16px Arial, Helvetica, sans-serif; background: white; background: rgba(255,255,255,0.8); box-shadow: 0 0 15px rgba(0,0,0,0.2); border-radius: 5px; } .info h4 { margin: 0 0 5px; color: #777; }',
-    '      .legend { text-align: left; line-height: 18px; color: #555; } .legend i { width: 18px; height: 18px; float: left; margin-right: 8px; opacity: 0.7; }',
-    '    </style>',
-    '  </head>',
-    '  <body>',
-    '      <div id="map"></div>',
-    '      <script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js" integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og==" crossorigin=""></script>',
-    '      <script src="https://unpkg.com/leaflet" type="text/javascript"></script>',
-    '      <script src="https://unpkg.com/leaflet-ant-path" type="text/javascript"></script>',
-    '    <script>',
-    '',
-    '      var stationPoints = L.layerGroup();',
-    '',
-    '//    CIRCLES SHALL BE PUT HERE',
-    '',
-    '      var routeLine = L.layerGroup();',
-    '      var antLine   = L.layerGroup();',
-    '',
-    '//    ROUTE LINE SHALL BE PUT HERE',
-    '      L.polyline(route, {color: \'blue\', weight: 1}).addTo(routeLine);',
-    '',
-    '      antroute = L.polyline.antPath(route, {',
-    '          "delay": 1000,',
-    '          "dashArray": [10,10],',
-    '          "weight": 3,',
-    '          "color": "#0000FF",',
-    '          "pulseColor": "#FFFFFF",',
-    '          "paused": false ,',
-    '          "reverse": false ,',
-    '          "hardwareAccelerated": true',
-    '      }).addTo(antLine)',
-    '',
-    '//    GRID LINES',
-    '      var latlongrid = L.layerGroup();',
-    '      latlongrid.onAdd = function(map) {',
-    '        for (var i = 50; i < 71; i++) {L.polyline([[i*1.0, -180.0],[i*1.0, 180.0]], {color: \'black\', weight: 1, opacity: 0.2}).addTo(this);}',
-    '        for (var i = 0; i < 61; i++) {L.polyline([[0.0, i*1.0],[80.0, i*1.0],], {color: \'black\', weight: 1, opacity: 0.2}).addTo(this);}',
-    '      }',
-    '',
-    '      function style(feature) {',
-    '        return {',
-    '          weight: 2,',
-    '          opacity: 1,',
-    '          color: \'white\',',
-    '          dashArray: \'3\',',
-    '          fillOpacity: 0.7,',
-    '          fillColor: getColor(feature.properties.visits)',
-    '        };',
-    '      }',
-    '',
-    '      function highlightFeature(e) {',
-    '        var layer = e.target;',
-    '        layer.setStyle({',
-    '          weight: 5,',
-    '          color: \'#666\',',
-    '          dashArray: \'\',',
-    '          fillOpacity: 0.7',
-    '        });',
-    '        if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {layer.bringToFront();}',
-    '        info.update(layer.feature.properties);',
-    '      }',
-    '',
-    '      var geojson;',
-    '',
-    '      function resetHighlight(e) {',
-    '        geojson.resetStyle(e.target);',
-    '        info.update();',
-    '      }',
-    '',
-    '      function zoomToFeature(e) {',
-    '        map.fitBounds(e.target.getBounds());',
-    '      }',
-    '',
-    '      function onEachFeature(feature, layer) {',
-    '        layer.on({',
-    '          mouseover: highlightFeature,',
-    '          mouseout: resetHighlight,',
-    '          click: zoomToFeature',
-    '        });',
-    '      }',
-    '',
-    '//    INFO',
-    '      var info = L.control();',
-    '',
-    '      info.onAdd = function (map) {',
-    '        this._div = L.DomUtil.create(\'div\', \'info\');',
-    '        this.update();',
-    '        return this._div;',
-    '      };',
-    '',
-    '      info.update = function (props) {',
-    '        this._div.innerHTML = \'<h4 style="color: #0000CC;">Cruise route of</h4>BothnianSea2017<br>2017-05-02 - 2017-05-13\';',
-    '      };',
-    '',
-    '//    LEGEND',
-    '      var legend = L.control({position: \'bottomright\'});',
-    '',
-    '      legend.onAdd = function (map) {',
-    '        var div = L.DomUtil.create(\'div\', \'info legend\'),',
-    '            clrRed = \'red\',',
-    '            clrGreen = \'green\';',
-    '        div.innerHTML = \'<h4 style="color: #0000CC;">Color of stations</h4>\'+',
-    '          \'<i style="background: \'+clrGreen+\'"></i> in Finnish EEZ<br>\'+',
-    '          \'<i style="background: \'+clrRed+\'"></i> \' + \'outside of Finnish EEZ\';',
-    '        return div;',
-    '      };',
-    '',
-    '//    CURSOR POSITION',
-    '      var cursorinfo = L.control({position: \'bottomleft\'});',
-    '',
-    '      cursorinfo.onAdd = function (map) {',
-    '        this._div = L.DomUtil.create(\'div\', \'info info2\');',
-    '        this.update();',
-    '        return this._div;',
-    '      };',
-    '',
-    '      cursorinfo.update = function (props) {',
-    '        this._div.innerHTML = \'Cursor position<br/>\';',
-    '      };',
-    '',
-    '//    MAP',
-    '      var map = L.map(\'map\', {center:[60.517167, 21.280833], zoom: 5});',
-    '      mapLink = \'<a href="http://openstreetmap.org">OpenStreetMap</a>\';',
-    '',
-    '      var strmaplayer = L.tileLayer(',
-    '        \'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png\', {',
-    '        attribution: \'&copy; \' + mapLink + \' Contributors\',',
-    '        maxZoom: 18,',
-    '      }).addTo(map);',
-    '',
-    '      var positron = L.tileLayer(\'http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png\', {',
-    '        attribution: \'�OpenStreetMap, �CartoDB\',',
-    '      });',
-    '',
-    '      var Esri_OceanBasemap = L.tileLayer(\'http://server.arcgisonline.com/ArcGIS/rest/services/Ocean_Basemap/MapServer/tile/{z}/{y}/{x}\', {',
-    '        attribution: \'Tiles &copy; Esri &mdash; Sources: GEBCO, NOAA, CHS, OSU, UNH, CSUMB, National Geographic, DeLorme, NAVTEQ, and Esri\',',
-    '        maxZoom: 13',
-    '      });',
-    '',
-    '      var Esri_WorldTopoMap = L.tileLayer(\'http://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}\', {',
-    '        attribution: \'Sources: Esri, HERE, Garmin, Intermap, increment P Corp., GEBCO, USGS, FAO, NPS, NRCAN, GeoBase, IGN, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), (c) OpenStreetMap contributors, and the GIS User Community\',',
-    '        maxZoom: 13',
-    '      });',
-    '',
-    '      var Esri_WorldStreetMap = L.tileLayer(\'http://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}\', {',
-    '        attribution: \'Sources: Esri, HERE, Garmin, USGS, Intermap, INCREMENT P, NRCan, Esri Japan, METI, Esri China (Hong Kong), Esri Korea, Esri (Thailand), NGCC, (c) OpenStreetMap contributors, and the GIS User Community\',',
-    '        maxZoom: 13',
-    '      });',
-    '',
-    '      var opentopo = L.tileLayer(\'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png\', {',
-    '        attribution: \'�OpenStreetMap, �CartoDB\',',
-    '      });',
-    '',
-    '      var bathymetryLayer = L.tileLayer.wms("http://ows.emodnet-bathymetry.eu/wms", {',
-    '        layers: \'emodnet:mean_atlas_land\',',
-    '        format: \'image/png\',',
-    '        transparent: true,',
-    '        attribution: "Emodnet bathymetry",',
-    '        opacity: 0.8',
-    '      });',
-    '',
-    '      var coastlinesLayer = L.tileLayer.wms("http://ows.emodnet-bathymetry.eu/wms", {',
-    '        layers: \'coastlines\',',
-    '        format: \'image/png\',',
-    '        transparent: true,',
-    '        attribution: "Emodnet bathymetry",',
-    '        opacity: 0.8',
-    '      });',
-    '',
-    '      var bathymetryGroupLayer = L.layerGroup([bathymetryLayer, coastlinesLayer]);',
-    '',
-    '      var contourLayer = L.tileLayer.wms("http://ows.emodnet-bathymetry.eu/wms", {',
-    '        layers: \'emodnet:contours\',',
-    '        format: \'image/png\',',
-    '        transparent: true,',
-    '        attribution: "Emodnet bathymetry",',
-    '        opacity: 0.8',
-    '      });',
-    '',
-    '      var depthcontours = L.layerGroup([contourLayer]);',
-    '',
-    '      L.Control.MousePosition = L.Control.extend({',
-    '        options: {',
-    '          position: \'bottomleft\',',
-    '          separator: \'<br>\',',
-    '          emptyString: \'Cursor coordinates<br>0&deg;N<br>0&deg;E\',',
-    '          lngFirst: false,',
-    '          numDigits: 5,',
-    '          lngFormatter: function(num) {',
-    '            var direction = (num < 0) ? \'W\' : \'E\';',
-    '            var degzero = (num < 10) ? \'0\' : \'\';',
-    '            var minzero = ((Math.abs(num)-Math.abs(Math.trunc(num)))*60 < 10) ? \'0\' : \'\';',
-    '            var formatted = degzero + Math.abs(L.Util.formatNum(num, 5)) + \'&deg; \' + direction + \' = \' + degzero + Math.abs(Math.trunc(num)) + \'&deg; \' + minzero + L.Util.formatNum((Math.abs(num)-Math.abs(Math.trunc(num)))*60,2) + \'&lsquo; \' + direction;',
-    '            return formatted;',
-    '          },',
-    '          latFormatter: function(num) {',
-    '            var direction = (num < 0) ? \'S\' : \'N\';',
-    '            var degzero = (num < 10) ? \'0\' : \'\';',
-    '            var minzero = ((Math.abs(num)-Math.abs(Math.trunc(num)))*60 < 10) ? \'0\' : \'\';',
-    '            var formatted = degzero + Math.abs(L.Util.formatNum(num, 5)) + \'&deg; \' + direction + \' = \' + degzero + Math.abs(Math.trunc(num)) + \'&deg; \' + minzero + L.Util.formatNum((Math.abs(num)-Math.abs(Math.trunc(num)))*60,2) + \'&lsquo; \' + direction;',
-    '            return formatted;',
-    '          },',
-    '          prefix: \'<h4 style="color: #0000CC;">Cursor position</h4>\'',
-    '        },',
-    '',
-    '        onAdd: function (map) {',
-    '          this._container = L.DomUtil.create(\'div\', \'leaflet-control-mouseposition\');',
-    '          L.DomEvent.disableClickPropagation(this._container);',
-    '          map.on(\'mousemove\', this._onMouseMove, this);',
-    '//          this._container.innerHTML=this.options.emptyString;',
-    '          return this._container;',
-    '        },',
-    '',
-    '        onRemove: function (map) {',
-    '          map.off(\'mousemove\', this._onMouseMove)',
-    '        },',
-    '',
-    '        _onMouseMove: function (e) {',
-    '          var lng = this.options.lngFormatter ? this.options.lngFormatter(e.latlng.lng) : L.Util.formatNum(e.latlng.lng, this.options.numDigits);',
-    '          var lat = this.options.latFormatter ? this.options.latFormatter(e.latlng.lat) : L.Util.formatNum(e.latlng.lat, this.options.numDigits);',
-    '          var value = this.options.lngFirst ? lng + this.options.separator + lat : lat + this.options.separator + lng;',
-    '          var prefixAndValue = this.options.prefix + value;',
-    '//          this._container.innerHTML = prefixAndValue;',
-    '          cursorinfo._div.innerHTML = prefixAndValue;',
-    '',
-    '        }',
-    '      });',
-    '',
-    '      var fairways = new L.LayerGroup();',
-    '      var fairWays =',
-    '        L.tileLayer.wms(\'https://extranet.liikennevirasto.fi/inspirepalvelu/avoin/wms\', {',
-    '          layers: \'vaylat,vaylaalueet\',',
-    '          transparent: true,',
-    '          format: \'image/png\',',
-    '          maxZoom: 18,',
-    '          minZoom: 7,',
-    '          attribution: \'CC 4.0 Liikennevirasto. Ei navigointikäyttöön. Ei täytä virallisen merikartan vaatimuksia.\',',
-    '      }).addTo(fairways);',
-    '',
-    '      var depthpoints = new L.LayerGroup();',
-    '      var depthPoints =',
-    '        L.tileLayer.wms(\'https://extranet.liikennevirasto.fi/inspirepalvelu/rajoitettu/wms\', {',
-    '          layers: \'syvyyspiste_p\',',
-    '          transparent: true,',
-    '          format: \'image/png\',',
-    '          maxZoom: 18,',
-    '          minZoom: 12,',
-    '          attribution: \'CC 4.0 Liikennevirasto. Ei navigointikäyttöön. Ei täytä virallisen merikartan vaatimuksia.\',',
-    '      }).addTo(depthpoints);',
-    '',
-    '      var eez = new L.LayerGroup();',
-    '      var eeZ =',
-    '        L.tileLayer.wms(\'http://geo.vliz.be/geoserver/MarineRegions/wms\', {',
-    '          layers: \'eez_boundaries\',',
-    '          transparent: true,',
-    '          format: \'image/png\',',
-    '          attribution: \'Marineregions.org.\',',
-    '      }).addTo(eez);',
-    '',
-    '      var internalwaters = new L.LayerGroup();',
-    '      var internalWaters =',
-    '        L.tileLayer.wms(\'http://geo.vliz.be/geoserver/MarineRegions/wms\', {',
-    '          layers: \'eez_internal_waters\',',
-    '          transparent: true,',
-    '          format: \'image/png\',',
-    '          attribution: \'Marineregions.org.\',',
-    '      }).addTo(internalwaters);',
-    '',
-    '      var internalwaters12 = new L.LayerGroup();',
-    '      var internalWaters12 =',
-    '        L.tileLayer.wms(\'http://geo.vliz.be/geoserver/MarineRegions/wms\', {',
-    '          layers: \'eez_12nm\',',
-    '          transparent: true,',
-    '          format: \'image/png\',',
-    '          attribution: \'Marineregions.org.\',',
-    '      }).addTo(internalwaters12);',
-    '',
-    '      var helcomareaboundaries = new L.LayerGroup();',
-    '      var helcomAreaboundaries =',
-    '        L.tileLayer.wms(\'https://maps.helcom.fi/arcgis/services/MADS/Sea_environmental_monitoring/MapServer/WmsServer\', {',
-    '          layers: \'89\',',
-    '          transparent: true,',
-    '          format: \'image/png\',',
-    '          attribution: \'HELCOM.\',',
-    '      }).addTo(helcomareaboundaries);',
-    '',
-    '      var helcomareas = new L.LayerGroup();',
-    '      var helcomAreas =',
-    '        L.tileLayer.wms(\'https://maps.helcom.fi/arcgis/services/MADS/Sea_environmental_monitoring/MapServer/WmsServer\', {',
-    '          layers: \'88\',',
-    '          transparent: true,',
-    '          format: \'image/png\',',
-    '          attribution: \'HELCOM.\',',
-    '      }).addTo(helcomareas);',
-    '',
-    '      var mNavAttr = \'--- Merikorttipalvelu perustuu Liikenneviraston tuottaman rasterimuotoiseen merikartta-aineistoon. Käyttölupa CC 4.0\'',
-    '        +\' Lähde: Liikennevirasto. Ei navigointikäyttöön. Ei täytä virallisen merikartan vaatimuksia.\';',
-    '',
-    '      var navigate = new L.LayerGroup();',
-    '      var Navigate     =',
-    '        L.tileLayer.wms(\'https://julkinen.traficom.fi/s57/wms\', {',
-    '          layers: \'cells\',',
-    '          transparent: true,',
-    '          format: \'image/png\',',
-    '          minZoom: 9,',
-    '          attribution: mNavAttr',
-    '      }).addTo(navigate);',
-    '',
-    '      var mllAttr =\' Maanmittauslaitoksen nimipalvelu\';',
-    '      var nimet = new L.LayerGroup();',
-    '      var Nimet =',
-    '        L.tileLayer.wms(\'https://inspire-wms.maanmittauslaitos.fi/inspire-wms/GN/wms\', {',
-    '          layers: \'GN.GeographicalNames\',',
-    '          transparent: true,',
-    '          format: \'image/png\',',
-    '          minzoom: 5,',
-    '          attribution: mllAttr',
-    '      }).addTo(nimet);',
-    '',
-    '      var openseamap = new L.LayerGroup();',
-    '      var openSeaMap =',
-    '        L.tileLayer(\'http://tiles.openseamap.org/seamark/{z}/{x}/{y}.png\', {minZoom: 6}).addTo(openseamap);',
-    '',
-    '      L.Map.mergeOptions({positionControl: false});',
-    '',
-    '      L.Map.addInitHook(function () {',
-    '        if (this.options.positionControl) {',
-    '          this.positionControl = new L.Control.MousePosition();',
-    '          this.addControl(this.positionControl);',
-    '        }',
-    '      });',
-    '',
-    '      L.control.mousePosition = function (options) {return new L.Control.MousePosition(options);};',
-    '      L.control.mousePosition().addTo(map);',
-    '',
-    '      info.addTo(map);',
-    '      cursorinfo.addTo(map);',
-    '      legend.addTo(map);',
-    '',
-    '//    Stations and route line are on the map by default, other layers not',
-    '      stationPoints.addTo(map);',
-    '      routeLine.addTo(map);',
-    '',
-    '      var baseMaps = {',
-    '        "StreetMap"             : strmaplayer,',
-    '        "Positron"              : positron,',
-    '        "ESRI OceanBasemap"     : Esri_OceanBasemap,',
-    '        "ESRI Worl_Topo_Map"    : Esri_WorldTopoMap,',
-    '        "ESRI World_Street_Map" : Esri_WorldStreetMap,',
-    '        "Topo"                  : opentopo',
-    '      }',
-    '',
-    '      var overlayMaps = {',
-    '        "EMODnet Bathymetry"            : bathymetryGroupLayer,',
-    '        "EMODnet depth contours"        : depthcontours,',
-    '        "EEZ"                           : eez,',
-    '        "Internal waters"               : internalwaters,',
-    '        "Internal waters 12 nm"         : internalwaters12,',
-    '        "HELCOM areas"                  : helcomareas,',
-    '        "HELCOM area boundaries"        : helcomareaboundaries,',
-    '        "Open seamap"                   : openseamap,',
-    '        "Finnish fairways"              : fairways,',
-    '        "Finnish navigation chart"      : navigate,',
-    '        "Finnish depthpoints"           : depthpoints,',
-    '        "Latitude-longitude grid"       : latlongrid,',
-    '        "Stations of the cruise"        : stationPoints,',
-    '        "Routeline of the cruise"       : routeLine,',
-    '        "Animated route of the cruise"  : antLine,',
-    '        "Paikannimet"                   : nimet',
-    '      }',
-    '',
-    '      L.control.layers(baseMaps, overlayMaps).addTo(map);',
-    '',
-    '    </script>',
-    '  </body>',
-    '</html>']
 
-
-def mcx2leaflethtml(filename):
-#=============================
+def mycruise_leaflet_map(filename):
+    # ==================================
     if '.MKX' in filename.upper():
         acruise = MKXfile(filename)
     else:
         acruise = MCXfile(filename)
-    
-    [lo1,la1,lo2,la2] = acruise.get_boundingbox()
-    
-    #with open('MyCruise_Leaflet_Routemap_template_variable_size.html','r') as f:
-    #    tmpl = f.read().split('\n')
-     
+
+    [lo1, la1, lo2, la2] = acruise.get_boundingbox()
+
     tmpl = mcx_html_tmpl
-        
+
     for I in range(len(tmpl)):
         if '<title>' in tmpl[I]:
             tmpl[I] = '    <title>Routemap of '+acruise.name_en+'</title>'
-            
+
         if 'var map = L.map' in tmpl[I]:
             tmpl[I] = '      var map = L.map(\'map\', {center:[' \
                 + '{:10.6f}'.format((la1+la2)/2) \
                 + ', ' \
                 + '{:11.6f}'.format((lo1+lo2)/2) \
                 + '], zoom: 5});'
-            
+
         if 'Cruise route of' in tmpl[I]:
-    #        tmpl[I] = tmpl[I].split('</h4>')[0] \
+            #        tmpl[I] = tmpl[I].split('</h4>')[0] \
             tmpl[I] = '        this._div.innerHTML = \'<h4 style="color: #0000CC;">Cruise route of' \
                 + ' the ' \
                 + acruise.platform_name \
@@ -870,26 +505,27 @@ def mcx2leaflethtml(filename):
         if '//pisteet ja reitti' in tmpl[I]:
             I1 = I
             I2 = I+1
-    
+
     olist = []
-    
-    for I in range(0,I1):
+
+    for I in range(0, I1):
         olist.append(tmpl[I])
-    
+
     olist.append('')
     olist.append('      var stationPoints = L.layerGroup();')
     olist.append('')
-    
+
     for I in range(len(acruise.route)):
         if acruise.route[I].name == 'P':
             continue
-        nameandtime = str(I)+': '+acruise.route[I].name+', '+acruise.route[I].entry+', '+'{:5.1f} {}'.format(acruise.route[I].distance,'nmi')
-        
+        nameandtime = str(I)+': '+acruise.route[I].name+', '+acruise.route[I].entry + \
+            ', '+'{:5.1f} {}'.format(acruise.route[I].distance, 'nmi')
+
         if acruise.route[I].country == 'Finland':
             pColor = 'green'
         else:
             pColor = 'red'
-    
+
         r = '      L.circle([' \
             + '{:9.6f}'.format(acruise.route[I].lat) \
             + ', ' \
@@ -902,28 +538,27 @@ def mcx2leaflethtml(filename):
             + '\',fillOpacity: 0.5' \
             + '}).addTo(stationPoints).bindTooltip("' \
             + nameandtime \
-            + '\");' 
+            + '\");'
         olist.append(r)
-    
+
     olist.append(' ')
     olist.append('      var routeLine = L.layerGroup();')
     olist.append('      var antLine   = L.layerGroup();')
     olist.append('')
-    
+
     rLine = '      route = ['
     for I in range(len(acruise.route)-1):
         rLine = rLine + '['+'{:9.5f}'.format(acruise.route[I].lat) \
-        + ', ' \
-        + '{:10.5f}'.format(acruise.route[I].lon) \
-        + '],'
-    rLine = rLine + '['+'{:9.5f}'.format(acruise.route[-1].lat) + ', ' + '{:10.5f}'.format(acruise.route[-1].lon) + ']]'
-    
-                     
+            + ', ' \
+            + '{:10.5f}'.format(acruise.route[I].lon) \
+            + '],'
+    rLine = rLine + '['+'{:9.5f}'.format(acruise.route[-1].lat) + \
+        ', ' + '{:10.5f}'.format(acruise.route[-1].lon) + ']]'
+
     olist.append(rLine)
-    
-    olist.append('      L.polyline(route, {color: \'blue\', weight: 1}).addTo(routeLine);')
+    olist.append(
+        '      L.polyline(route, {color: \'blue\', weight: 1}).addTo(routeLine);')
     olist.append(' ')
-    
     olist.append('      antroute = L.polyline.antPath(route, {')
     olist.append('          "delay": 1000,')
     olist.append('          "dashArray": [10,10],')
@@ -935,17 +570,17 @@ def mcx2leaflethtml(filename):
     olist.append('          "hardwareAccelerated": true')
     olist.append('      }).addTo(antLine)')
     olist.append(' ')
-    
-    for I in range(I2,len(tmpl)):
+
+    for I in range(I2, len(tmpl)):
         olist.append(tmpl[I])
-    
+
     o_name = filename.split('.')[0]+'.html'
-    o_file = open(o_name,'w')
+    o_file = open(o_name, 'w')
     for i in range(len(olist)):
         o_file.write(olist[i]+'\n')
     o_file.close()
-    print('Valmis! Tulostettu tiedosto '+o_name)     
-#=================
+    print('Valmis! Tulostettu tiedosto '+o_name)
+# =================
 
 
 class Participant:
@@ -967,9 +602,10 @@ class Participant:
     exit_harbour = ''
     isboardingwithcruise = True
     isleavingwithcruise = True
-    def __init__(self, first_name, family_name):  
-        self.first_name = first_name  
-        self.family_name = family_name 
+
+    def __init__(self, first_name, family_name):
+        self.first_name = first_name
+        self.family_name = family_name
 
 
 class Sciencecrew:
@@ -1002,8 +638,9 @@ class Routepoint:
     mooring_function = ''
     country = ''
     sea_area = ''
-    def __init__(self, name, lat, lon):  
-        self.name = name  
+
+    def __init__(self, name, lat, lon):
+        self.name = name
         self.lat = lat
         self.lon = lon
 
@@ -1039,7 +676,7 @@ class MCXfile:
     timezonediff = 0
     letterid = ''
     aim_fi = []
-    aim_en  = []
+    aim_en = []
     project = ''
     ctdname = ''
     language = ''
@@ -1052,7 +689,7 @@ class MCXfile:
     arrival_port = ''
     header_errors = []
 
-    def __init__(self,fname):
+    def __init__(self, fname):
         self.fname = fname
         self.name = ''
         self.organiser = ''
@@ -1090,7 +727,7 @@ class MCXfile:
         else:
             self.OK = False
             print('\nNOTE! File '+fname+' not found!')
-    
+
     def read(self):
         # read the mcx-file into mcx-object
         cruise = ET.parse(self.fname).getroot()
@@ -1110,19 +747,19 @@ class MCXfile:
         self.plan_language = cruise_attributes['language']
 
         self.software_version = cruise.find("software").get('version')
-        
+
         ship = cruise.find("ship")
         self.ship_name = ship.get('name')
         self.ship_code = ship.get('platformcode')
         self.ship_master = ship.get('master')
 
         departure = cruise.find('departure')
-        self.departure_time  = departure.get('dateTime')
+        self.departure_time = departure.get('dateTime')
         self.departure_timezone = departure.get('timeZone')
         self.departure_port = departure.get('harbour')
 
         arrival = cruise.find('arrival')
-        self.arrival_time  = arrival.get('dateTime')
+        self.arrival_time = arrival.get('dateTime')
         self.arrival_timezone = arrival.get('timeZone')
         self.arrival_port = arrival.get('harbour')
 
@@ -1130,11 +767,11 @@ class MCXfile:
 
         # Description of the cruise in English and in Finnish
         description_en = cruise.find('description')
-        description_fi= cruise.find('descriptionFIN')
-        self.aim_en  = []
+        description_fi = cruise.find('descriptionFIN')
+        self.aim_en = []
         for row in description_en.findall('dr'):
             self.aim_en.append(row.text)
-        self.aim_fi  = []
+        self.aim_fi = []
         for row in description_fi.findall('drf'):
             self.aim_fi.append(row.text)
 
@@ -1147,15 +784,16 @@ class MCXfile:
         self.scientific_crew = []
         staff = cruise.find("staff")
         for person in staff.findall("person"):
-            member = Participant(person.attrib['firstName'],person.attrib['familyName'])
+            member = Participant(
+                person.attrib['firstName'], person.attrib['familyName'])
             member.organisation = person.attrib['organisation']
             member.infixed = person.attrib['inFixed']
             member.indate = person.attrib['inDate']
             member.outfixed = person.attrib['outFixed']
             member.outdate = person.attrib['outDate']
-            if person.find('role') != None:
+            if person.find('role') is not None:
                 member.role = person.find('role').text
-            if person.find('project') != None:
+            if person.find('project') is not None:
                 member.project = person.find('project').text
             cabin = person.find('cabin').attrib
             member.cabin_no = cabin['nro']
@@ -1163,7 +801,7 @@ class MCXfile:
             lab = person.find('lab').attrib
             member.lab_no = lab['nro']
             member.lab_phone = lab['phone']
- 
+
             self.scientific_crew.append(member)
 
         # Get cruise route
@@ -1174,7 +812,8 @@ class MCXfile:
 
         hm = defaults.find('duration').text[1:]
         if 'H' in hm and 'M' in hm:
-            h = float(hm.split('H')[0]) + float(hm.split('H')[1].split('M')[0])/60
+            h = float(hm.split('H')[0]) + \
+                float(hm.split('H')[1].split('M')[0])/60
         elif 'H' in hm:
             h = float(hm.split('H')[0])
         elif 'M' in hm:
@@ -1182,29 +821,29 @@ class MCXfile:
         else:
             h = 1.0
         self.default_duration_hours = h
-        
-        if defaults.find('observations') != None:
+
+        if defaults.find('observations') is not None:
             ocode = defaults.find('observations')
-            if ocode.find('obscode') != None:
+            if ocode.find('obscode') is not None:
                 self.default_observations = ocode.find('obscode').text
-        
+
         self.default_mapsymbol = defaults.find('mapsymbol').attrib
 
         # Get routepoints
         stations = croute.find("points")
         for station in stations.findall("point"):
             la = station.find('lat').text.split('D')
-            lat =float(la[0])+float(la[1].split('M')[0])/60
+            lat = float(la[0])+float(la[1].split('M')[0])/60
             lo = station.find('lon').text.split('D')
             lon = float(lo[0])+float(lo[1].split('M')[0])/60
-            
-            rpoint = Routepoint(station.find('name').text,lat,lon)
+
+            rpoint = Routepoint(station.find('name').text, lat, lon)
 
             rpoint.nro = station.attrib['nro']
             rpoint.type = station.attrib['type']
             rpoint.status = station.attrib['status']
             rpoint.index = station.attrib['index']
-            
+
             rpoint.depth = float(station.find('depth').text)
             rpoint.distance = float(station.find('distance').text)
             rpoint.entry = station.find('entry').attrib['dateTime']
@@ -1216,35 +855,36 @@ class MCXfile:
             rpoint.speed = float(station.find('speed').text)
             rpoint.speed_status = station.find('speed').attrib['status']
 
-            if station.find('observations') != None:
+            if station.find('observations') is not None:
                 ocode = station.find('observations')
-                if ocode.find('obscode') != None:
+                if ocode.find('obscode') is not None:
                     rpoint.observations = ocode.find('obscode').text
 
-            if station.find('SDN_P02_parameters') != None:
-                rpoint.SDN_P02_parameters = station.find('SDN_P02_parameters').text
-            
-            if station.find('SDN_C77_data') != None:
+            if station.find('SDN_P02_parameters') is not None:
+                rpoint.SDN_P02_parameters = station.find(
+                    'SDN_P02_parameters').text
+
+            if station.find('SDN_C77_data') is not None:
                 rpoint.SDN_C77_data = station.find('SDN_C77_data').text
-            
+
             rpoint.country = station.find('Country').text
             rpoint.sea_area = station.find('SeaArea').text
-            rpoint.mooring = child_node_text(station,'isMooring')
+            rpoint.mooring = child_node_text(station, 'isMooring')
             rpoint.mapsymbol = station.find('mapsymbol').attrib
-            rpoint.comments = child_node_text(station,'comments')
+            rpoint.comments = child_node_text(station, 'comments')
 
             self.route.append(rpoint)
 
-        if cruise.find('acquisitionInfo') != None:
+        if cruise.find('acquisitionInfo') is not None:
             # jotain
             self.acquisitionInfo = cruise.find('acquisitionInfo').text
 
-        if cruise.find('accesPolicies') != None:
+        if cruise.find('accesPolicies') is not None:
             self.accessPolicies = cruise.find('accesPolicies').text
 
-        if cruise.find('dataPaths') != None:
+        if cruise.find('dataPaths') is not None:
             datapaths = cruise.find('dataPaths')
-            if datapaths.find('MKXsave') != None:
+            if datapaths.find('MKXsave') is not None:
                 if datapaths.find('MKXsave').attrib['value'] == 'false':
                     self.mkxsave = False
                 else:
@@ -1252,20 +892,20 @@ class MCXfile:
 
         self.mapfiles = []
         for mf in cruise.findall('mapfiles'):
-            if mf != None:
+            if mf is not None:
                 self.mapfiles.append(mf.text)
-        
+
         if self.name_en == '':
             self.name_en = self.name_fi
 
-    def get_persons_in_role(self,a_role):
+    def get_persons_in_role(self, a_role):
         result = []
         for person in self.scientific_crew:
             if a_role in person.role:
                 result.append(person.family_name+' '+person.first_name)
         return result
 
-    def who_is(self,a_role):
+    def who_is(self, a_role):
         result = 'none'
         for person in self.scientific_crew:
             if a_role in person.role:
@@ -1291,32 +931,31 @@ class MCXfile:
         return lat
 
     def get_boundingbox(self):
-        result = [180.0,90,-180.0,-90.0]
+        result = [180.0, 90, -180.0, -90.0]
         lat = []
         lon = []
         for station in self.route:
             lat.append(station.lat)
             lon.append(station.lon)
-        result = [min(lon),min(lat),max(lon),max(lat)]
-        return result   
+        result = [min(lon), min(lat), max(lon), max(lat)]
+        return result
 
     def leaflethtml(self):
-    #=====================
-        [lo1,la1,lo2,la2] = self.get_boundingbox()
+        # =====================
+        [lo1, la1, lo2, la2] = self.get_boundingbox()
         llhtml = mcx_html_tmpl.copy()
         for I in range(len(llhtml)):
             if '<title>' in llhtml[I]:
                 llhtml[I] = '    <title>Routemap of '+self.name_en+'</title>'
-                
+
             if 'var map = L.map' in llhtml[I]:
                 llhtml[I] = '      var map = L.map(\'map\', {center:[' \
                     + '{:10.6f}'.format((la1+la2)/2) \
                     + ', ' \
                     + '{:11.6f}'.format((lo1+lo2)/2) \
                     + '], zoom: 5});'
-                
+
             if 'Cruise route of' in llhtml[I]:
-        #        tmpl[I] = tmpl[I].split('</h4>')[0] \
                 llhtml[I] = '        this._div.innerHTML = \'<h4 style="color: #0000CC;">Cruise route of' \
                     + ' the ' \
                     + self.platform_name \
@@ -1334,26 +973,27 @@ class MCXfile:
             if '//pisteet ja reitti' in llhtml[I]:
                 I1 = I
                 I2 = I+1
-        
+
         olist = []
-        
-        for I in range(0,I1):
+
+        for I in range(0, I1):
             olist.append(llhtml[I])
-        
+
         olist.append('')
         olist.append('      var stationPoints = L.layerGroup();')
         olist.append('')
-        
+
         for I in range(len(self.route)):
             if self.route[I].name == 'P':
                 continue
-            nameandtime = str(I)+': '+self.route[I].name+', '+self.route[I].entry+', '+'{:5.1f} {}'.format(self.route[I].distance,'nmi')
-            
+            nameandtime = str(I)+': '+self.route[I].name+', '+self.route[I].entry + \
+                ', '+'{:5.1f} {}'.format(self.route[I].distance, 'nmi')
+
             if self.route[I].country == 'Finland':
                 pColor = 'green'
             else:
                 pColor = 'red'
-        
+
             r = '      L.circle([' \
                 + '{:9.6f}'.format(self.route[I].lat) \
                 + ', ' \
@@ -1366,28 +1006,28 @@ class MCXfile:
                 + '\',fillOpacity: 0.5' \
                 + '}).addTo(stationPoints).bindTooltip("' \
                 + nameandtime \
-                + '\");' 
+                + '\");'
             olist.append(r)
-        
+
         olist.append(' ')
         olist.append('      var routeLine = L.layerGroup();')
         olist.append('      var antLine   = L.layerGroup();')
         olist.append('')
-        
+
         rLine = '      route = ['
         for I in range(len(self.route)-1):
             rLine = rLine + '['+'{:9.5f}'.format(self.route[I].lat) \
-            + ', ' \
-            + '{:10.5f}'.format(self.route[I].lon) \
-            + '],'
-        rLine = rLine + '['+'{:9.5f}'.format(self.route[-1].lat) + ', ' + '{:10.5f}'.format(self.route[-1].lon) + ']]'
-        
-                         
+                + ', ' \
+                + '{:10.5f}'.format(self.route[I].lon) \
+                + '],'
+        rLine = rLine + \
+            '['+'{:9.5f}'.format(self.route[-1].lat) + ', ' + \
+            '{:10.5f}'.format(self.route[-1].lon) + ']]'
+
         olist.append(rLine)
-        
-        olist.append('      L.polyline(route, {color: \'blue\', weight: 1}).addTo(routeLine);')
+        olist.append(
+            '      L.polyline(route, {color: \'blue\', weight: 1}).addTo(routeLine);')
         olist.append(' ')
-        
         olist.append('      antroute = L.polyline.antPath(route, {')
         olist.append('          "delay": 1000,')
         olist.append('          "dashArray": [10,10],')
@@ -1399,17 +1039,266 @@ class MCXfile:
         olist.append('          "hardwareAccelerated": true')
         olist.append('      }).addTo(antLine)')
         olist.append(' ')
-        
-        for I in range(I2,len(llhtml)):
+
+        for I in range(I2, len(llhtml)):
             olist.append(llhtml[I])
-        
+
         o_name = self.fname.split('.')[0]+'.html'
-        o_file = open(o_name,'w')
+        o_file = open(o_name, 'w')
         for i in range(len(olist)):
             o_file.write(olist[i]+'\n')
         o_file.close()
-        print('Valmis! Tulostettu tiedosto '+o_name) 
-        return    
+        print('Valmis! Tulostettu tiedosto '+o_name)
+        return
+
+    def to_gmtscript(self,topodir=None):
+        o_name = self.fname.split('.')[0]+'_gmt.txt'
+        [lo1, la1, lo2, la2] = self.get_boundingbox()
+        reg = [float(math.trunc(lo1-1)),float(math.trunc(lo2+2)), float(math.trunc(la1)), float(math.trunc(la2+1))]
+        olist = []
+        olist.append('import pygmt')
+        olist.append(' ')
+        olist.append('fig = pygmt.Figure()')
+        olist.append(' ')
+        olist.append('# mapregion [minlon, maxlon, minlat, maxlat]')
+        olist.append(f'fig.basemap(region=[{reg[0]:.{7}}, {reg[1]:.{7}}, {reg[2]:.{7}}, {reg[3]:.{7}}], projection="M8i", frame=True)')
+        if topodir:
+            topodat = topodir + 'Baltic_Sea_topo.nc'
+            topoclr = topodir + 'Baltic_Sea_topo.cpt' 
+            olist.append('# plot bottom topography')
+            olist.append(f'fig.grdimage("{topodat}", cmap="{topoclr}")')
+            olist.append('# plot land')
+            olist.append('fig.coast(land="darkgreen")')
+            penclr = 'black'
+        else:
+            olist.append('# plot land')
+            olist.append('fig.coast(land="darkgreen", water="navy")')
+            penclr = 'white'
+
+        xs = ', '.join([f'{p.lon:.{7}}' for p in self.route])
+        ys = ', '.join([f'{p.lat:.{7}}' for p in self.route])
+        s ='fig.plot(x=[' + xs + '], y=[' + ys + ']'
+        olist.append('# plot routeline ')
+        olist.append(s + f', pen="1,{penclr}")')
+        olist.append('# plot station marks')
+        olist.append(s + ', pen="3,red", S="c0.1")')
+        # Plot cruise name
+        namestr = f'Cruise {self.name}, {self.departure_time.split("T")[0]} - {self.arrival_time.split("T")[0]}'
+        olist.append('# plot title ')
+        olist.append(f'fig.text(text="{namestr}", x={reg[0]+(reg[1]-reg[0])/25}, y={reg[3]-(reg[3]-reg[2])/25}, justify="LM", font="16p,Helvetica-Bold,{penclr}")')
+        olist.append(' ')
+        olist.append('fig.show()')
+
+        ofile = open(o_name, 'w')
+        for r in olist:
+            ofile.write(r+'\n')
+        ofile.close()
+
+    def to_ODV_GOBline(self):
+        olist = []
+        olist.append('%GOB1.04 graphics objects')
+        olist.append('')
+        olist.append(':POLYLINE')
+        olist.append('coordinates=1')
+        olist.append('clip=1')
+        olist.append('iOrder=1')
+        olist.append('isFixed=0')
+        olist.append('doSmooth=0')
+        olist.append('LineColor=1')
+        olist.append('LineType=0')
+        olist.append('LineWidth=1')
+        olist.append('FillColor=-1')
+        olist.append('SymbolTypeAtStart=-1')
+        olist.append('SymbolSizeAtStart=3')
+        olist.append('SymbolTypeAtEnd=-1')
+        olist.append('SymbolSizeAtEnd=3')
+        olist.append(f'nPts={len(self.route)}')
+        olist.append(f'nStrokePts={len(self.route)}')
+        for p in self.route:
+            olist.append('{:10.5f}'.format(p.lon).strip() + ' ' + '{:9.5f}'.format(p.lat).strip())
+
+        ofile = open(self.fname.split('.')[0]+'_ODV_line.gob', 'w')
+        for r in olist:
+            ofile.write(r+'\n')
+        ofile.close()
+
+    def to_ODV_GOBsymbols(self):
+        stations = [str(p.lon) + ' ' + str(p.lat) for p in self.route if p.type == 's']
+        olist = []
+        olist.append('%GOB1.04 graphics objects')
+        olist.append('')
+        olist.append(':SYMBOLSET')
+        olist.append(f'Text={self.name_en}')
+        olist.append('coordinates=1')
+        olist.append('clip=1')
+        olist.append('iOrder=1')
+        olist.append('isFixed=1')
+        olist.append('addToLegends=1')
+        olist.append('symbolNo=1')
+        olist.append('symbolSize=2.5')
+        olist.append('LineColor=1')
+        olist.append('LineType=0')
+        olist.append('LineWidth=-1')
+        olist.append('FillColor=12')
+        olist.append('BorderColor=0')
+        olist.append('BorderWidth=1')
+        olist.append(f'nPts={len(stations)}')
+
+        for p in self.route:
+            if p.type == 's':
+                olist.append('{:10.5f}'.format(p.lon).strip() + ' ' + '{:9.5f}'.format(p.lat).strip())
+
+        ofile = open(self.fname.split('.')[0]+'_ODV_points.gob', 'w')
+        for r in olist:
+            ofile.write(r+'\n')
+        ofile.close()
+
+    def to_ODV_gob(self):
+        olist = []
+        olist.append('%GOB1.04 graphics objects')
+        olist.append('')
+        olist.append(':POLYLINE')
+        olist.append('coordinates=1')
+        olist.append('clip=1')
+        olist.append('iOrder=1')
+        olist.append('isFixed=0')
+        olist.append('doSmooth=0')
+        olist.append('LineColor=1')
+        olist.append('LineType=0')
+        olist.append('LineWidth=1')
+        olist.append('FillColor=-1')
+        olist.append('SymbolTypeAtStart=-1')
+        olist.append('SymbolSizeAtStart=3')
+        olist.append('SymbolTypeAtEnd=-1')
+        olist.append('SymbolSizeAtEnd=3')
+        olist.append(f'nPts={len(self.route)}')
+        olist.append(f'nStrokePts={len(self.route)}')
+        for p in self.route:
+            olist.append('{:10.5f}'.format(p.lon).strip() + ' ' + '{:9.5f}'.format(p.lat).strip())
+
+        stations = [str(p.lon) + ' ' + str(p.lat) for p in self.route if p.type == 's']
+        olist.append('')
+        olist.append(':SYMBOLSET')
+        olist.append(f'Text={self.name_en}')
+        olist.append('coordinates=1')
+        olist.append('clip=1')
+        olist.append('iOrder=1')
+        olist.append('isFixed=1')
+        olist.append('addToLegends=1')
+        olist.append('symbolNo=1')
+        olist.append('symbolSize=2.5')
+        olist.append('LineColor=1')
+        olist.append('LineType=0')
+        olist.append('LineWidth=-1')
+        olist.append('FillColor=12')
+        olist.append('BorderColor=0')
+        olist.append('BorderWidth=1')
+        olist.append(f'nPts={len(stations)}')
+
+        for p in self.route:
+            if p.type == 's':
+                olist.append('{:10.5f}'.format(p.lon).strip() + ' ' + '{:9.5f}'.format(p.lat).strip())
+
+        ofile = open(self.fname.split('.')[0]+'_ODV.gob', 'w')
+        for r in olist:
+            ofile.write(r+'\n')
+        ofile.close()
+
+    def to_KML(self):
+        olist = []
+        olist.append('<?xml version="1.0" encoding="UTF-8"?>')
+        olist.append('<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">')
+        olist.append('<Document>')
+        olist.append(f'  <name>{self.name_en}</name>')
+        olist.append('  <open>1</open>')
+        olist.append('  <description>Cruise route</description>')
+        olist.append('  <Style id="sn_placemark_circle">')
+        olist.append('    <IconStyle>')
+        olist.append('      <color>802e19fc</color>')
+        olist.append('      <scale>0.6</scale>')
+        olist.append('      <Icon>')
+        olist.append('        <href>http://maps.google.com/mapfiles/kml/shapes/placemark_circle.png</href>')
+        olist.append('      </Icon>')
+        olist.append('    </IconStyle>')
+        olist.append('    <LabelStyle>')
+        olist.append('      <color>1affffff</color>')
+        olist.append('      <scale>0.3</scale>')
+        olist.append('    </LabelStyle>')
+        olist.append('    <ListStyle>')
+        olist.append('    </ListStyle>')
+        olist.append('  </Style>')
+        olist.append('  <StyleMap id="msn_placemark_circle">')
+        olist.append('    <Pair>')
+        olist.append('      <key>normal</key>')
+        olist.append('      <styleUrl>#sn_placemark_circle</styleUrl>')
+        olist.append('    </Pair>')
+        olist.append('    <Pair>')
+        olist.append('      <key>highlight</key>')
+        olist.append('      <styleUrl>#sh_placemark_circle_highlight</styleUrl>')
+        olist.append('    </Pair>')
+        olist.append('  </StyleMap>')
+        olist.append('  <Style id="sh_placemark_circle_highlight">')
+        olist.append('    <IconStyle>')
+        olist.append('      <color>802e19fc</color>')
+        olist.append('      <scale>0.6</scale>')
+        olist.append('      <Icon>')
+        olist.append('        <href>http://maps.google.com/mapfiles/kml/shapes/placemark_circle_highlight.png</href>')
+        olist.append('      </Icon>')
+        olist.append('    </IconStyle>')
+        olist.append('    <LabelStyle>')
+        olist.append('      <color>1affffff</color>')
+        olist.append('      <scale>0.3</scale>')
+        olist.append('    </LabelStyle>')
+        olist.append('    <ListStyle>')
+        olist.append('    </ListStyle>')
+        olist.append('  </Style>')
+        olist.append('  <Placemark>')
+        olist.append('    <name>Route</name>')
+        olist.append('    <LineString>')
+        olist.append('      <tessellate>1</tessellate>')
+        olist.append('      <coordinates>')
+        for p in self.route:
+            olist.append('        ' + '{:10.5f}'.format(p.lon).strip() + ',' + '{:10.5f}'.format(p.lat).strip() + ',0')
+        olist.append('      </coordinates>')
+        olist.append('    </LineString>')
+        olist.append('  </Placemark>')
+        olist.append('  <Folder>')
+        olist.append('    <name>Points</name>')
+        olist.append('    <open>1</open>')
+        olist.append('    <description>These are the observation stations</description>')
+        olist.append('    <LookAt>')
+        lons = [p.lon for p in self.route]
+        lats = [p.lat for p in self.route]
+        clon = (min(lons) + max(lons))/2
+        clat = (min(lats) + max(lats))/2
+        olist.append('      <longitude>{:10.5f}</longitude>'.format(clon))
+        olist.append('      <latitude>{:9.5}</latitude>'.format(clat))
+        olist.append('      <altitude>0</altitude>')
+        olist.append('      <heading>0</heading>')
+        olist.append('      <tilt>0</tilt>')
+        olist.append('      <range>500000</range>')
+        olist.append('    </LookAt>')
+        for p in self.route:
+            if p.name != 'P':
+                olist.append('    <Placemark>')
+                olist.append(f'      <name>{p.name}</name>')
+                olist.append('      <Snippet maxLines="0"></Snippet>')
+                olist.append('      <description><![CDATA[' + self.name_en)
+                olist.append('        <p>Longitude: {:10.5f}<br>Latitude: {:9.5f}<br>]]></description>'.format(p.lon,p.lat))
+                olist.append('      <styleUrl>#msn_placemark_circle</styleUrl>')
+                olist.append('      <Point>')
+                olist.append('        <coordinates>{:10.5f},{:9.5f},0</coordinates>'.format(p.lon,p.lat))
+                olist.append('      </Point>')
+                olist.append('    </Placemark>')
+        olist.append('    </Folder>')
+        olist.append('  </Document>')
+        olist.append('</kml>')
+
+        ofile = open(self.fname.split('.')[0]+'.kml', 'w')
+        for r in olist:
+            ofile.write(r+'\n')
+        ofile.close()
+
 
 class MKXfile:
     name = ''
@@ -1427,7 +1316,7 @@ class MKXfile:
     timezonediff = 0
     letterid = ''
     aim_fi = []
-    aim_en  = []
+    aim_en = []
     project = ''
     ctdname = ''
     language = ''
@@ -1440,7 +1329,7 @@ class MKXfile:
     arrival_port = ''
     header_errors = []
 
-    def __init__(self,fname):
+    def __init__(self, fname):
         self.fname = fname
         self.name = ''
         self.organiser = ''
@@ -1479,7 +1368,7 @@ class MKXfile:
             self.OK = True
         else:
             self.OK = False
-    
+
     def read(self):
         # read the mcx-file into mcx-object
         cruise = ET.parse(self.fname).getroot()
@@ -1499,29 +1388,29 @@ class MKXfile:
         self.plan_language = cruise_attributes['language']
 
         self.software_version = cruise.find("software").get('version')
-        
+
         ship = cruise.find("ship")
         self.ship_name = ship.get('name')
         self.ship_code = ship.get('platformcode')
         self.ship_master = ship.get('master')
 
         departure = cruise.find('departure')
-        self.departure_time  = departure.get('dateTime')
+        self.departure_time = departure.get('dateTime')
         self.departure_timezone = departure.get('timeZone')
         self.departure_port = departure.get('harbour')
 
         arrival = cruise.find('arrival')
-        self.arrival_time  = arrival.get('dateTime')
+        self.arrival_time = arrival.get('dateTime')
         self.arrival_timezone = arrival.get('timeZone')
         self.arrival_port = arrival.get('harbour')
 
         # Description of the cruise in English and in Finnish
         description_en = cruise.find('description')
-        description_fi= cruise.find('descriptionFIN')
-        self.aim_en  = []
+        description_fi = cruise.find('descriptionFIN')
+        self.aim_en = []
         for row in description_en.findall('dr'):
             self.aim_en.append(row.text)
-        self.aim_fi  = []
+        self.aim_fi = []
         for row in description_fi.findall('drf'):
             self.aim_fi.append(row.text)
 
@@ -1534,15 +1423,16 @@ class MKXfile:
         self.scientific_crew = []
         staff = cruise.find("staff")
         for person in staff.findall("person"):
-            member = Participant(person.attrib['firstName'],person.attrib['familyName'])
+            member = Participant(
+                person.attrib['firstName'], person.attrib['familyName'])
             member.organisation = person.attrib['institute']
             member.infixed = person.attrib['inFixed']
             member.indate = person.attrib['inDate']
             member.outfixed = person.attrib['outFixed']
 #            member.outdate = person.attrib['outDate']
-            if person.find('role') != None:
+            if person.find('role') is not None:
                 member.role = person.find('role').text
-            if person.find('project') != None:
+            if person.find('project') is not None:
                 member.project = person.find('project').text
             cabin = person.find('cabin').attrib
             member.cabin_no = cabin['nro']
@@ -1550,7 +1440,7 @@ class MKXfile:
             lab = person.find('lab').attrib
             member.lab_no = lab['nro']
             member.lab_phone = lab['phone']
- 
+
             self.scientific_crew.append(member)
 
         # Get cruise route
@@ -1561,7 +1451,8 @@ class MKXfile:
 
         hm = defaults.find('duration').text[1:]
         if 'H' in hm and 'M' in hm:
-            h = float(hm.split('H')[0]) + float(hm.split('H')[1].split('M')[0])/60
+            h = float(hm.split('H')[0]) + \
+                float(hm.split('H')[1].split('M')[0])/60
         elif 'H' in hm:
             h = float(hm.split('H')[0])
         elif 'M' in hm:
@@ -1569,29 +1460,29 @@ class MKXfile:
         else:
             h = 1.0
         self.default_duration_hours = h
-        
-        if defaults.find('observations') != None:
+
+        if defaults.find('observations') is not None:
             ocode = defaults.find('observations')
-            if ocode.find('obscode') != None:
+            if ocode.find('obscode') is not None:
                 self.default_observations = ocode.find('obscode').text
-        
+
         self.default_mapsymbol = defaults.find('mapsymbol').attrib
 
         # Get routepoints
         stations = croute.find("points")
         for station in stations.findall("point"):
             la = station.find('lat').text.split('D')
-            lat =float(la[0])+float(la[1].split('M')[0])/60
+            lat = float(la[0])+float(la[1].split('M')[0])/60
             lo = station.find('long').text.split('D')
             lon = float(lo[0])+float(lo[1].split('M')[0])/60
-            
-            rpoint = Routepoint(station.find('name').text,lat,lon)
+
+            rpoint = Routepoint(station.find('name').text, lat, lon)
 
             rpoint.nro = station.attrib['nro']
             rpoint.type = station.attrib['type']
             rpoint.status = station.attrib['status']
             rpoint.index = station.attrib['index']
-            
+
             rpoint.depth = float(station.find('depth').text)
             rpoint.distance = float(station.find('distance').text)
             rpoint.entry = station.find('entry').attrib['dateTime']
@@ -1603,40 +1494,41 @@ class MKXfile:
             rpoint.speed = float(station.find('speed').text)
             rpoint.speed_status = station.find('speed').attrib['status']
 
-            if station.find('observations') != None:
+            if station.find('observations') is not None:
                 ocode = station.find('observations')
-                if ocode.find('obscode') != None:
+                if ocode.find('obscode') is not None:
                     rpoint.observations = ocode.find('obscode').text
 
-            if station.find('SDN_P02_parameters') != None:
-                rpoint.SDN_P02_parameters = station.find('SDN_P02_parameters').text
-            
-            if station.find('SDN_C77_data') != None:
+            if station.find('SDN_P02_parameters') is not None:
+                rpoint.SDN_P02_parameters = station.find(
+                    'SDN_P02_parameters').text
+
+            if station.find('SDN_C77_data') is not None:
                 rpoint.SDN_C77_data = station.find('SDN_C77_data').text
-            
-            if station.find('Country') != None:
+
+            if station.find('Country') is not None:
                 rpoint.country = station.find('Country').text
-            if station.find('SeaArea') != None:
+            if station.find('SeaArea') is not None:
                 rpoint.sea_area = station.find('SeaArea').text
-            if child_node_text(station,'isMooring') != None:
-                rpoint.mooring = child_node_text(station,'isMooring')
-            if station.find('mapsymbol') != None:
+            if child_node_text(station, 'isMooring') is not None:
+                rpoint.mooring = child_node_text(station, 'isMooring')
+            if station.find('mapsymbol') is not None:
                 rpoint.mapsymbol = station.find('mapsymbol').attrib
-            if child_node_text(station,'comments') != None:
-                rpoint.comments = child_node_text(station,'comments')
+            if child_node_text(station, 'comments') is not None:
+                rpoint.comments = child_node_text(station, 'comments')
 
             self.route.append(rpoint)
 
-        if cruise.find('acquisitionInfo') != None:
+        if cruise.find('acquisitionInfo') is not None:
             # jotain
             self.acquisitionInfo = cruise.find('acquisitionInfo').text
 
-        if cruise.find('accesPolicies') != None:
+        if cruise.find('accesPolicies') is not None:
             self.accessPolicies = cruise.find('accesPolicies').text
 
-        if cruise.find('dataPaths') != None:
+        if cruise.find('dataPaths') is not None:
             datapaths = cruise.find('dataPaths')
-            if datapaths.find('MKXsave') != None:
+            if datapaths.find('MKXsave') is not None:
                 if datapaths.find('MKXsave').attrib['value'] == 'false':
                     self.mkxsave = False
                 else:
@@ -1644,20 +1536,20 @@ class MKXfile:
 
         self.mapfiles = []
         for mf in cruise.findall('mapfiles'):
-            if mf != None:
+            if mf is not None:
                 self.mapfiles.append(mf.text)
-        
+
         if self.name_en == '':
             self.name_en = self.name_fi
 
-    def get_persons_in_role(self,a_role):
+    def get_persons_in_role(self, a_role):
         result = []
         for person in self.scientific_crew:
             if a_role in person.role:
                 result.append(person.family_name+' '+person.first_name)
         return result
 
-    def who_is(self,a_role):
+    def who_is(self, a_role):
         result = 'none'
         for person in self.scientific_crew:
             if a_role in person.role:
@@ -1683,32 +1575,31 @@ class MKXfile:
         return lat
 
     def get_boundingbox(self):
-        result = [180.0,90,-180.0,-90.0]
+        result = [180.0, 90, -180.0, -90.0]
         lat = []
         lon = []
         for station in self.route:
             lat.append(station.lat)
             lon.append(station.lon)
-        result = [min(lon),min(lat),max(lon),max(lat)]
+        result = [min(lon), min(lat), max(lon), max(lat)]
         return result
 
     def leaflethtml(self):
-    #=====================
-        [lo1,la1,lo2,la2] = self.get_boundingbox()        
+        #   Prints the leaflet html into a file
+        [lo1, la1, lo2, la2] = self.get_boundingbox()
         llhtml = mcx_html_tmpl.copy()
         for I in range(len(llhtml)):
             if '<title>' in llhtml[I]:
                 llhtml[I] = '    <title>Routemap of '+self.name_en+'</title>'
-                
+
             if 'var map = L.map' in llhtml[I]:
                 llhtml[I] = '      var map = L.map(\'map\', {center:[' \
                     + '{:10.6f}'.format((la1+la2)/2) \
                     + ', ' \
                     + '{:11.6f}'.format((lo1+lo2)/2) \
                     + '], zoom: 5});'
-                
+
             if 'Cruise route of' in llhtml[I]:
-        #        tmpl[I] = tmpl[I].split('</h4>')[0] \
                 llhtml[I] = '        this._div.innerHTML = \'<h4 style="color: #0000CC;">Cruise route of' \
                     + ' the ' \
                     + self.platform_name \
@@ -1726,27 +1617,30 @@ class MKXfile:
             if '//pisteet ja reitti' in llhtml[I]:
                 I1 = I
                 I2 = I+1
-        
+
         olist = []
-        
-        for I in range(0,I1):
+
+        for I in range(0, I1):
             olist.append(llhtml[I])
-        
+
         olist.append('')
         olist.append('      var stationPoints = L.layerGroup();')
         olist.append('')
-        
+
         for I in range(len(self.route)):
             if self.route[I].name == 'P':
                 continue
-            nameandtime = str(I)+': '+self.route[I].name+', '+self.route[I].entry+', '+'{:5.1f} {}'.format(self.route[I].distance,'nmi')
-            
-            country = sarea.whosEconomicZone([self.route[I].lon,self.route[I].lat])
+            nameandtime = str(I) + ': ' + self.route[I].name + ', ' +\
+                self.route[I].entry +\
+                ', ' + '{:5.1f} {}'.format(self.route[I].distance, 'nmi')
+
+            country = sarea.whosEconomicZone(
+                [self.route[I].lon, self.route[I].lat])
             if country == 'Finland':
                 pColor = 'green'
             else:
                 pColor = 'red'
-        
+
             r = '      L.circle([' \
                 + '{:9.6f}'.format(self.route[I].lat) \
                 + ', ' \
@@ -1759,28 +1653,29 @@ class MKXfile:
                 + '\',fillOpacity: 0.5' \
                 + '}).addTo(stationPoints).bindTooltip("' \
                 + nameandtime \
-                + '\");' 
+                + '\");'
             olist.append(r)
-        
+
         olist.append(' ')
         olist.append('      var routeLine = L.layerGroup();')
         olist.append('      var antLine   = L.layerGroup();')
         olist.append('')
-        
+
         rLine = '      route = ['
         for I in range(len(self.route)-1):
             rLine = rLine + '['+'{:9.5f}'.format(self.route[I].lat) \
-            + ', ' \
-            + '{:10.5f}'.format(self.route[I].lon) \
-            + '],'
-        rLine = rLine + '['+'{:9.5f}'.format(self.route[-1].lat) + ', ' + '{:10.5f}'.format(self.route[-1].lon) + ']]'
-        
-                         
+                + ', ' \
+                + '{:10.5f}'.format(self.route[I].lon) \
+                + '],'
+        rLine = rLine + \
+            '['+'{:9.5f}'.format(self.route[-1].lat) + ', ' + \
+            '{:10.5f}'.format(self.route[-1].lon) + ']]'
+
         olist.append(rLine)
-        
-        olist.append('      L.polyline(route, {color: \'blue\', weight: 1}).addTo(routeLine);')
+        olist.append(
+            '      L.polyline(route, {color: \'blue\', weight: 1}).' +
+            'addTo(routeLine);')
         olist.append(' ')
-        
         olist.append('      antroute = L.polyline.antPath(route, {')
         olist.append('          "delay": 1000,')
         olist.append('          "dashArray": [10,10],')
@@ -1792,14 +1687,259 @@ class MKXfile:
         olist.append('          "hardwareAccelerated": true')
         olist.append('      }).addTo(antLine)')
         olist.append(' ')
-        
-        for I in range(I2,len(llhtml)):
+
+        for I in range(I2, len(llhtml)):
             olist.append(llhtml[I])
-        
-        o_name = self.fname.split('.')[0]+'.html'
-        o_file = open(o_name,'w')
+
+        o_file = open(self.fname.split('.')[0]+'.html', 'w')
         for i in range(len(olist)):
             o_file.write(olist[i]+'\n')
         o_file.close()
-        print('Valmis! Tulostettu tiedosto '+o_name) 
-        return    
+
+    def to_gmtscript(self,topodir=None):
+        o_name = self.fname.split('.')[0]+'_gmt.txt'
+        [lo1, la1, lo2, la2] = self.get_boundingbox()
+        reg = [float(math.trunc(lo1-1)),float(math.trunc(lo2+2)), float(math.trunc(la1)), float(math.trunc(la2+1))]
+        olist = []
+        olist.append('import pygmt')
+        olist.append(' ')
+        olist.append('fig = pygmt.Figure()')
+        olist.append(' ')
+        olist.append('# mapregion [minlon, maxlon, minlat, maxlat]')
+        olist.append(f'fig.basemap(region=[{reg[0]:.{7}}, {reg[1]:.{7}}, {reg[2]:.{7}}, {reg[3]:.{7}}], projection="M8i", frame=True)')
+        if topodir:
+            topodat = topodir + 'Baltic_Sea_topo.nc'
+            topoclr = topodir + 'Baltic_Sea_topo.cpt' 
+            olist.append('# plot bottom topography')
+            olist.append(f'fig.grdimage("{topodat}", cmap="{topoclr}")')
+            olist.append('# plot land')
+            olist.append('fig.coast(land="darkgreen")')
+            penclr = 'black'
+        else:
+            olist.append('# plot land')
+            olist.append('fig.coast(land="darkgreen", water="navy")')
+            penclr = 'white'
+
+        xs = ', '.join([f'{p.lon:.{7}}' for p in self.route])
+        ys = ', '.join([f'{p.lat:.{7}}' for p in self.route])
+        s ='fig.plot(x=[' + xs + '], y=[' + ys + ']'
+        olist.append('# plot routeline ')
+        olist.append(s + f', pen="1,{penclr}")')
+        olist.append('# plot station marks')
+        olist.append(s + ', pen="3,red", S="c0.1")')
+        # Plot cruise name
+        namestr = f'Cruise {self.name}, {self.departure_time.split("T")[0]} - {self.arrival_time.split("T")[0]}'
+        olist.append('# plot title ')
+        olist.append(f'fig.text(text="{namestr}", x={reg[0]+(reg[1]-reg[0])/25}, y={reg[3]-(reg[3]-reg[2])/25}, justify="LM", font="16p,Helvetica-Bold,{penclr}")')
+        olist.append(' ')
+        olist.append('fig.show()')
+
+        ofile = open(o_name, 'w')
+        for r in olist:
+            ofile.write(r+'\n')
+        ofile.close()
+
+    def to_ODV_GOBline(self):
+        olist = []
+        olist.append('%GOB1.04 graphics objects')
+        olist.append('')
+        olist.append(':POLYLINE')
+        olist.append('coordinates=1')
+        olist.append('clip=1')
+        olist.append('iOrder=1')
+        olist.append('isFixed=0')
+        olist.append('doSmooth=0')
+        olist.append('LineColor=1')
+        olist.append('LineType=0')
+        olist.append('LineWidth=1')
+        olist.append('FillColor=-1')
+        olist.append('SymbolTypeAtStart=-1')
+        olist.append('SymbolSizeAtStart=3')
+        olist.append('SymbolTypeAtEnd=-1')
+        olist.append('SymbolSizeAtEnd=3')
+        olist.append(f'nPts={len(self.route)}')
+        olist.append(f'nStrokePts={len(self.route)}')
+        for p in self.route:
+            olist.append('{:10.5f}'.format(p.lon).strip() + ' ' + '{:9.5f}'.format(p.lat).strip())
+
+        ofile = open(self.fname.split('.')[0]+'_ODV_line.gob', 'w')
+        for r in olist:
+            ofile.write(r+'\n')
+        ofile.close()
+
+    def to_ODV_GOBsymbols(self):
+        stations = [str(p.lon) + ' ' + str(p.lat) for p in self.route if p.type == 's']
+        olist = []
+        olist.append('%GOB1.04 graphics objects')
+        olist.append('')
+        olist.append(':SYMBOLSET')
+        olist.append(f'Text={self.name_en}')
+        olist.append('coordinates=1')
+        olist.append('clip=1')
+        olist.append('iOrder=1')
+        olist.append('isFixed=1')
+        olist.append('addToLegends=1')
+        olist.append('symbolNo=1')
+        olist.append('symbolSize=2.5')
+        olist.append('LineColor=1')
+        olist.append('LineType=0')
+        olist.append('LineWidth=-1')
+        olist.append('FillColor=12')
+        olist.append('BorderColor=0')
+        olist.append('BorderWidth=1')
+        olist.append(f'nPts={len(stations)}')
+
+        for p in self.route:
+            if p.type == 's':
+                olist.append('{:10.5f}'.format(p.lon).strip() + ' ' + '{:9.5f}'.format(p.lat).strip())
+
+        ofile = open(self.fname.split('.')[0]+'_ODV_points.gob', 'w')
+        for r in olist:
+            ofile.write(r+'\n')
+        ofile.close()
+
+    def to_ODV_gob(self):
+        olist = []
+        olist.append('%GOB1.04 graphics objects')
+        olist.append('')
+        olist.append(':POLYLINE')
+        olist.append('coordinates=1')
+        olist.append('clip=1')
+        olist.append('iOrder=1')
+        olist.append('isFixed=0')
+        olist.append('doSmooth=0')
+        olist.append('LineColor=1')
+        olist.append('LineType=0')
+        olist.append('LineWidth=1')
+        olist.append('FillColor=-1')
+        olist.append('SymbolTypeAtStart=-1')
+        olist.append('SymbolSizeAtStart=3')
+        olist.append('SymbolTypeAtEnd=-1')
+        olist.append('SymbolSizeAtEnd=3')
+        olist.append(f'nPts={len(self.route)}')
+        olist.append(f'nStrokePts={len(self.route)}')
+        for p in self.route:
+            olist.append('{:10.5f}'.format(p.lon).strip() + ' ' + '{:9.5f}'.format(p.lat).strip())
+
+        stations = [str(p.lon) + ' ' + str(p.lat) for p in self.route if p.type == 's']
+        olist.append('')
+        olist.append(':SYMBOLSET')
+        olist.append(f'Text={self.name_en}')
+        olist.append('coordinates=1')
+        olist.append('clip=1')
+        olist.append('iOrder=1')
+        olist.append('isFixed=1')
+        olist.append('addToLegends=1')
+        olist.append('symbolNo=1')
+        olist.append('symbolSize=2.5')
+        olist.append('LineColor=1')
+        olist.append('LineType=0')
+        olist.append('LineWidth=-1')
+        olist.append('FillColor=12')
+        olist.append('BorderColor=0')
+        olist.append('BorderWidth=1')
+        olist.append(f'nPts={len(stations)}')
+
+        for p in self.route:
+            if p.type == 's':
+                olist.append('{:10.5f}'.format(p.lon).strip() + ' ' + '{:9.5f}'.format(p.lat).strip())
+
+        ofile = open(self.fname.split('.')[0]+'_ODV.gob', 'w')
+        for r in olist:
+            ofile.write(r+'\n')
+        ofile.close()
+
+    def to_KML(self):
+        olist = []
+        olist.append('<?xml version="1.0" encoding="UTF-8"?>')
+        olist.append('<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">')
+        olist.append('<Document>')
+        olist.append(f'  <name>{self.name_en}</name>')
+        olist.append('  <open>1</open>')
+        olist.append('  <description>Cruise route</description>')
+        olist.append('  <Style id="sn_placemark_circle">')
+        olist.append('    <IconStyle>')
+        olist.append('      <color>802e19fc</color>')
+        olist.append('      <scale>0.6</scale>')
+        olist.append('      <Icon>')
+        olist.append('        <href>http://maps.google.com/mapfiles/kml/shapes/placemark_circle.png</href>')
+        olist.append('      </Icon>')
+        olist.append('    </IconStyle>')
+        olist.append('    <LabelStyle>')
+        olist.append('      <color>1affffff</color>')
+        olist.append('      <scale>0.3</scale>')
+        olist.append('    </LabelStyle>')
+        olist.append('    <ListStyle>')
+        olist.append('    </ListStyle>')
+        olist.append('  </Style>')
+        olist.append('  <StyleMap id="msn_placemark_circle">')
+        olist.append('    <Pair>')
+        olist.append('      <key>normal</key>')
+        olist.append('      <styleUrl>#sn_placemark_circle</styleUrl>')
+        olist.append('    </Pair>')
+        olist.append('    <Pair>')
+        olist.append('      <key>highlight</key>')
+        olist.append('      <styleUrl>#sh_placemark_circle_highlight</styleUrl>')
+        olist.append('    </Pair>')
+        olist.append('  </StyleMap>')
+        olist.append('  <Style id="sh_placemark_circle_highlight">')
+        olist.append('    <IconStyle>')
+        olist.append('      <color>802e19fc</color>')
+        olist.append('      <scale>0.6</scale>')
+        olist.append('      <Icon>')
+        olist.append('        <href>http://maps.google.com/mapfiles/kml/shapes/placemark_circle_highlight.png</href>')
+        olist.append('      </Icon>')
+        olist.append('    </IconStyle>')
+        olist.append('    <LabelStyle>')
+        olist.append('      <color>1affffff</color>')
+        olist.append('      <scale>0.3</scale>')
+        olist.append('    </LabelStyle>')
+        olist.append('    <ListStyle>')
+        olist.append('    </ListStyle>')
+        olist.append('  </Style>')
+        olist.append('  <Placemark>')
+        olist.append('    <name>Route</name>')
+        olist.append('    <LineString>')
+        olist.append('      <tessellate>1</tessellate>')
+        olist.append('      <coordinates>')
+        for p in self.route:
+            olist.append('        ' + '{:10.5f}'.format(p.lon).strip() + ',' + '{:10.5f}'.format(p.lat).strip() + ',0')
+        olist.append('      </coordinates>')
+        olist.append('    </LineString>')
+        olist.append('  </Placemark>')
+        olist.append('  <Folder>')
+        olist.append('    <name>Points</name>')
+        olist.append('    <open>1</open>')
+        olist.append('    <description>These are the observation stations</description>')
+        olist.append('    <LookAt>')
+        lons = [p.lon for p in self.route]
+        lats = [p.lat for p in self.route]
+        clon = (min(lons) + max(lons))/2
+        clat = (min(lats) + max(lats))/2
+        olist.append('      <longitude>{:10.5f}</longitude>'.format(clon))
+        olist.append('      <latitude>{:9.5}</latitude>'.format(clat))
+        olist.append('      <altitude>0</altitude>')
+        olist.append('      <heading>0</heading>')
+        olist.append('      <tilt>0</tilt>')
+        olist.append('      <range>500000</range>')
+        olist.append('    </LookAt>')
+        for p in self.route:
+            if p.name != 'P':
+                olist.append('    <Placemark>')
+                olist.append(f'      <name>{p.name}</name>')
+                olist.append('      <Snippet maxLines="0"></Snippet>')
+                olist.append('      <description><![CDATA[' + self.name_en)
+                olist.append('        <p>Longitude: {:10.5f}<br>Latitude: {:9.5f}<br>]]></description>'.format(p.lon,p.lat))
+                olist.append('      <styleUrl>#msn_placemark_circle</styleUrl>')
+                olist.append('      <Point>')
+                olist.append('        <coordinates>{:10.5f},{:9.5f},0</coordinates>'.format(p.lon,p.lat))
+                olist.append('      </Point>')
+                olist.append('    </Placemark>')
+        olist.append('    </Folder>')
+        olist.append('  </Document>')
+        olist.append('</kml>')
+
+        ofile = open(self.fname.split('.')[0]+'.kml', 'w')
+        for r in olist:
+            ofile.write(r+'\n')
+        ofile.close()
