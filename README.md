@@ -8,7 +8,7 @@ MyCruise is Windows-software written in Delphi7 (Pascal).
 In the core of MyCruise is the cruise plan that is an xml-file. Aranda compatible version has extension mkx.
 Newer version of MyCruise uses more advanced cruise plan with an extension mcx.
 
-The myCruisefile.py contains mycruisefile-class that can read MCX- and MKX-files.
+myCruisefile.py contains mycruisefile-class that can read MCX- and MKX-files.
 usage: acruise = mycruisefile(filename)
 
 At the moment the most useful methods of the class are related to plotting maps. 
