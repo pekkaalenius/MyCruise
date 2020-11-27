@@ -21,3 +21,6 @@ python mcx_to_leaflet.py  - asks the file(s) from which maps are saved
 python mcx_to_leaflet.py filename.mcx (or filename.mkx) - saves filename as map
 python mcx_to_leaflet.py directoryname - saves all mcx and mkx files in the defined directory as maps
 
+The Python script mcx_to_map.py makes maps or route for maps. This includes
+the actions of mcx_to_leaflet.py. running mcx_to_map.py -h gives the usegae with options. 
+
