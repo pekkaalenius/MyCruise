@@ -11,9 +11,9 @@ Newer version of MyCruise uses more advanced cruise plan with an extension mcx.
 The mcxFile.py contain MCXfile and MKXfile classes that can read and parse respective files.
 usage: acruise = MCXfile(filename)
 
-The only useful method of the MCXfile and MKXfile classes at the moment is leaflethtml, which makes a versatile 
-Leaflet map (html-file) that can be opened with a browser and shows the route of the cruise with stations and
-some information on the stations.
+At the moment the useful methods of the MCXfile and MKXfile classes are related to plotting maps. 
+The most versatile option is to plot a Leaflet map (html-file) that can be opened with a browser.
+It shows the route of the cruise with stations and some information on the stations.
 
 The Python script mcx_to_leaflet.py makes maps from mcx or mkx file(s).
 usage:
@@ -22,5 +22,6 @@ python mcx_to_leaflet.py filename.mcx (or filename.mkx) - saves filename as map
 python mcx_to_leaflet.py directoryname - saves all mcx and mkx files in the defined directory as maps
 
 The Python script mcx_to_map.py makes maps or route for maps. This includes
-the actions of mcx_to_leaflet.py. running mcx_to_map.py -h gives the usegae with options. 
+the actions of mcx_to_leaflet.py. running mcx_to_map.py -h gives the usegae with options.
+The routine can produce Leaflet, GMT, ODV and KML compatible files.
 
