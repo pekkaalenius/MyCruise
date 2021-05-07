@@ -614,36 +614,32 @@ class Sciencecrew:
 
 
 class Routepoint:
-    name = ''
-    lat = 0.0
-    lon = 0.0
-    depth = 0.0
-    point_type = ''
-    arrival_time = ''
-    departure_time = ''
-    duration = 0.0
-    observations = []
-    isvisited = False
-    baseindex = 0
-    speedfrom = 10.0
-    selected = False
-    isarrivalgiven = False
-    isspeedcalculated = False
-    mapsymbol = 0
-    mapsymbol_size = 0
-    mapsymbol_color = 0
-    comment = ''
-    SDN_P02_parameters = ''
-    SDN_C77_data = ''
-    mooring = False
-    mooring_function = ''
-    country = ''
-    sea_area = ''
-
     def __init__(self, name, lat, lon):
         self.name = name
         self.lat = lat
         self.lon = lon
+        self.depth = 0.0
+        self.point_type = ''
+        self.arrival_time = ''
+        self.departure_time = ''
+        self.duration = 0.0
+        self.observations = []
+        self.isvisited = False
+        self.baseindex = 0
+        self.speedfrom = 10.0
+        self.selected = False
+        self.isarrivalgiven = False
+        self.isspeedcalculated = False
+        self.mapsymbol = 0
+        self.mapsymbol_size = 0
+        self.mapsymbol_color = 0
+        self.comment = ''
+        self.SDN_P02_parameters = ''
+        self.SDN_C77_data = ''
+        self.mooring = False
+        self.mooring_function = ''
+        self.country = ''
+        self.sea_area = ''
 
 
 class Cruiseroute:
@@ -662,34 +658,6 @@ class Cruiseroute:
 
 
 class MCXfile:
-    name_fi = ''
-    name_en = ''
-    ship_name = ''
-    ship_code = ''
-    ship_master = ''
-    nro = 0
-    year = 0
-    organiser = ''
-    scientific_crew = []
-    route = []
-    status = ''
-    plandatetime = ''
-    timezonediff = 0
-    letterid = ''
-    aim_fi = []
-    aim_en = []
-    project = ''
-    ctdname = ''
-    language = ''
-    softwareversion = ''
-    departure_time = ''
-    departure_timezone = ''
-    departure_port = ''
-    arrival_time = ''
-    arrival_timezone = ''
-    arrival_port = ''
-    header_errors = []
-
     def __init__(self, fname):
         self.fname = fname
         self.name = ''
