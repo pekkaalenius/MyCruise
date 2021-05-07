@@ -1,5 +1,7 @@
 # MyCruise
 
+# mcxFile.py
+
 This repository contains some MyCruise related Python units.
 They contain only a small fraction of the functionalities of the MyCruise software
 
