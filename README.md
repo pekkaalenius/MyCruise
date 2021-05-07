@@ -35,3 +35,6 @@ This unit contains routines to make station lists for use with other routines.
 There are option to read local files that contain dictionaries and routines to generate
 dictionaries from ICES station dictionary (publicly available) and from FMI database (in-house only).
 
+# string_utils.py
+
+This unit contains some string handling that is used in other routines included.
